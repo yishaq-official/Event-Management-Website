@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Menu, X, User, LogOut, Calendar, PlusCircle, Ticket } from 'lucide-react';
+import { FaSearch as Search, FaBars as Menu, FaTimes as X, FaUser as User, FaSignOutAlt as LogOut, FaCalendarAlt as Calendar, FaPlusCircle as PlusCircle, FaTicketAlt as Ticket } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {

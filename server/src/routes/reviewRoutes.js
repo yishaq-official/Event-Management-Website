@@ -10,8 +10,8 @@ const {
 } = require('../controllers/reviewController');
 const { authenticate, authorize } = require('../middleware/authMiddleware');
 const { generalLimiter } = require('../middleware/securityMiddleware');
+const { validate } = require('../middleware/validationMiddleware');
 const {
-  validate,
   createReviewValidation,
   updateReviewValidation,
   reportReviewValidation

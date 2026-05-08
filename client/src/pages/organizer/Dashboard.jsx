@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Calendar, 
-  Users, 
-  DollarSign, 
-  TrendingUp,
-  EventIcon,
-  Eye,
-  Ticket,
-  BarChart3,
-  PieChart,
-  Download,
-  Plus,
-  Edit,
-  Trash2,
-  MoreVertical,
-  Filter,
-  Search
-} from 'lucide-react';
+  FaCalendarAlt as Calendar,
+  FaUsers as Users,
+  FaDollarSign as DollarSign,
+  FaChartLine as TrendingUp,
+  FaCalendarCheck as EventIcon,
+  FaEye as Eye,
+  FaChartBar as BarChart3,
+  FaChartPie as PieChart,
+  FaDownload as Download,
+  FaPlus as Plus,
+  FaEdit as Edit,
+  FaTrash as Trash2,
+  FaEllipsisV as MoreVertical,
+  FaSearch as Search
+} from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 

@@ -1,12 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Calendar, MapPin, Users, Star, Clock, TrendingUp, ChevronRight } from 'lucide-react';
+import { FaSearch as Search, FaCalendarAlt as Calendar, FaMapMarkerAlt as MapPin, FaUsers as Users, FaStar as Star, FaClock as Clock, FaChevronRight as ChevronRight } from 'react-icons/fa';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [featuredEvents, setFeaturedEvents] = useState([]);
-  const [categories, setCategories] = useState([
+  const [featuredEvents] = useState([
+    {
+      id: 1,
+      title: 'Tech Conference 2024',
+      category: 'tech',
+      date: '2024-06-15',
+      time: '09:00 AM',
+      location: 'San Francisco, CA',
+      price: 299,
+      image: 'https://images.unsplash.com/photo-1540575467063-78a14283ac1a?w=500&h=300&fit=crop',
+      organizer: 'TechHub',
+      attendees: 250,
+      rating: 4.8,
+      featured: true
+    },
+    {
+      id: 2,
+      title: 'Summer Music Festival',
+      category: 'music',
+      date: '2024-07-20',
+      time: '04:00 PM',
+      location: 'Los Angeles, CA',
+      price: 89,
+      image: 'https://images.unsplash.com/photo-1459749411177-4f07531e16a8?w=500&h=300&fit=crop',
+      organizer: 'Music Events Co.',
+      attendees: 500,
+      rating: 4.9,
+      featured: true
+    },
+    {
+      id: 3,
+      title: 'Business Summit 2024',
+      category: 'business',
+      date: '2024-08-10',
+      time: '10:00 AM',
+      location: 'New York, NY',
+      price: 199,
+      image: 'https://images.unsplash.com/photo-1515168833192-5cf5b4b6c6e4?w=500&h=300&fit=crop',
+      organizer: 'Business Network',
+      attendees: 150,
+      rating: 4.7,
+      featured: true
+    }
+  ]);
+  const [categories] = useState([
     { id: 'tech', name: 'Technology', icon: '💻', color: 'bg-blue-500' },
     { id: 'music', name: 'Music', icon: '🎵', color: 'bg-purple-500' },
     { id: 'business', name: 'Business', icon: '💼', color: 'bg-gray-700' },
@@ -14,54 +57,6 @@ const Home = () => {
     { id: 'education', name: 'Education', icon: '📚', color: 'bg-yellow-500' },
     { id: 'gaming', name: 'Gaming', icon: '🎮', color: 'bg-red-500' }
   ]);
-
-  // Mock data for featured events
-  useEffect(() => {
-    setFeaturedEvents([
-      {
-        id: 1,
-        title: 'Tech Conference 2024',
-        category: 'tech',
-        date: '2024-06-15',
-        time: '09:00 AM',
-        location: 'San Francisco, CA',
-        price: 299,
-        image: 'https://images.unsplash.com/photo-1540575467063-78a14283ac1a?w=500&h=300&fit=crop',
-        organizer: 'TechHub',
-        attendees: 250,
-        rating: 4.8,
-        featured: true
-      },
-      {
-        id: 2,
-        title: 'Summer Music Festival',
-        category: 'music',
-        date: '2024-07-20',
-        time: '04:00 PM',
-        location: 'Los Angeles, CA',
-        price: 89,
-        image: 'https://images.unsplash.com/photo-1459749411177-4f07531e16a8?w=500&h=300&fit=crop',
-        organizer: 'Music Events Co.',
-        attendees: 500,
-        rating: 4.9,
-        featured: true
-      },
-      {
-        id: 3,
-        title: 'Business Summit 2024',
-        category: 'business',
-        date: '2024-08-10',
-        time: '10:00 AM',
-        location: 'New York, NY',
-        price: 199,
-        image: 'https://images.unsplash.com/photo-1515168833192-5cf5b4b6c6e4?w=500&h=300&fit=crop',
-        organizer: 'Business Network',
-        attendees: 150,
-        rating: 4.7,
-        featured: true
-      }
-    ]);
-  }, []);
 
   const filteredEvents = featuredEvents.filter(event => {
     const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase());

@@ -1,29 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Clock, 
-  DollarSign,
-  Ticket,
-  User,
-  Mail,
-  Phone,
-  Company,
-  CreditCard,
-  Shield,
-  ArrowLeft,
-  CheckCircle,
-  AlertCircle
-} from 'lucide-react';
+  FaCalendarAlt as Calendar,
+  FaMapMarkerAlt as MapPin,
+  FaClock as Clock,
+  FaUser as User,
+  FaEnvelope as Mail,
+  FaPhone as Phone,
+  FaBuilding as Company,
+  FaCreditCard as CreditCard,
+  FaShieldAlt as Shield,
+  FaArrowLeft as ArrowLeft,
+  FaCheckCircle as CheckCircle,
+  FaExclamationCircle as AlertCircle
+} from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
 // Stripe publishable key (should be in environment variables)
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || 'pk_test_...');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_...');
 
 const BookingForm = ({ event, selectedTicket, quantity, onBookingComplete }) => {
   const stripe = useStripe();

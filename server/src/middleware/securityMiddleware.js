@@ -1,4 +1,4 @@
-const rateLimit = require('express-rate-limit');
+const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss');
@@ -18,7 +18,7 @@ const createRateLimiter = (windowMs, max, message) => {
     skipSuccessfulRequests: false,
     // Custom key generator to include user ID if available
     keyGenerator: (req) => {
-      return req.user ? `user_${req.user._id}` : req.ip;
+      return req.user ? `user_${req.user._id}` : ipKeyGenerator(req.ip);
     }
   });
 };
@@ -50,64 +50,42 @@ const uploadLimiter = createRateLimiter(
 
 // XSS protection and input sanitization
 const sanitizeInput = (req, res, next) => {
+  const sanitizeObject = (obj) => {
+    if (typeof obj === 'string') {
+      return xss(obj, {
+        whiteList: [],
+        stripIgnoreTagBody: ['script', 'style']
+      });
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(sanitizeObject);
+    }
+    
+    if (typeof obj === 'object' && obj !== null) {
+      const sanitized = {};
+      for (const key in obj) {
+        sanitized[key] = sanitizeObject(obj[key]);
+      }
+      return sanitized;
+    }
+    
+    return obj;
+  };
+
   // Sanitize body
   if (req.body) {
-    req.body = mongoSanitize(req.body);
-    
-    // Additional XSS protection for string fields
-    const sanitizeObject = (obj) => {
-      if (typeof obj === 'string') {
-        return xss(obj, {
-          whiteList: [],
-          stripIgnoreTag: false,
-          stripIgnoreTag: ['script', 'style']
-        });
-      }
-      
-      if (typeof obj === 'object' && obj !== null) {
-        const sanitized = {};
-        for (const key in obj) {
-          sanitized[key] = sanitizeObject(obj[key]);
-        }
-        return sanitized;
-      }
-      
-      return obj;
-    };
-    
-    req.body = sanitizeObject(req.body);
+    req.body = sanitizeObject(mongoSanitize.sanitize(req.body));
   }
 
   // Sanitize query parameters
   if (req.query) {
-    req.query = mongoSanitize(req.query);
-    
-    // Additional XSS protection for query params
-    const sanitizedQuery = {};
-    for (const key in req.query) {
-      sanitizedQuery[key] = xss(req.query[key], {
-        whiteList: [],
-        stripIgnoreTag: false,
-        stripIgnoreTag: ['script', 'style']
-      });
-    }
-    req.query = sanitizedQuery;
+    req.query = sanitizeObject(mongoSanitize.sanitize(req.query));
   }
 
   // Sanitize URL parameters
   if (req.params) {
-    req.params = mongoSanitize(req.params);
-    
-    // Additional XSS protection for params
-    const sanitizedParams = {};
-    for (const key in req.params) {
-      sanitizedParams[key] = xss(req.params[key], {
-        whiteList: [],
-        stripIgnoreTag: false,
-        stripIgnoreTag: ['script', 'style']
-      });
-    }
-    req.params = sanitizedParams;
+    req.params = sanitizeObject(mongoSanitize.sanitize(req.params));
   }
 
   next();

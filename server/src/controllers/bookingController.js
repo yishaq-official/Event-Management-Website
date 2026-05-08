@@ -2,7 +2,7 @@ const Booking = require('../models/Booking');
 const Event = require('../models/Event');
 const Payment = require('../models/Payment');
 const { validationResult } = require('express-validator');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = process.env.STRIPE_SECRET_KEY ? require('stripe')(process.env.STRIPE_SECRET_KEY) : null;
 
 // @desc    Create booking with payment
 // @route   POST /api/bookings
@@ -118,6 +118,15 @@ const createBooking = async (req, res, next) => {
     }
 
     // Create Stripe payment intent for paid events
+    if (!stripe) {
+      await Booking.findByIdAndDelete(booking._id);
+
+      return res.status(503).json({
+        success: false,
+        message: 'Payment processing is not configured'
+      });
+    }
+
     try {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(totalAmount * 100), // Convert to cents
@@ -197,6 +206,13 @@ const confirmPayment = async (req, res, next) => {
     }
 
     // Retrieve payment intent from Stripe
+    if (!stripe) {
+      return res.status(503).json({
+        success: false,
+        message: 'Payment processing is not configured'
+      });
+    }
+
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     
     if (paymentIntent.status !== 'succeeded') {
@@ -396,7 +412,7 @@ const cancelBooking = async (req, res, next) => {
     }
 
     // Process refund if applicable
-    if (refundAmount > 0 && booking.stripePaymentIntentId) {
+    if (refundAmount > 0 && booking.stripePaymentIntentId && stripe) {
       try {
         const refund = await stripe.refunds.create({
           payment_intent: booking.stripePaymentIntentId,

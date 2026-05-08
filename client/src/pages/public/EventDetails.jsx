@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Star, 
-  Clock, 
-  Share2, 
-  Heart, 
-  Ticket,
-  ChevronLeft,
-  ExternalLink,
-  Phone,
-  Mail,
-  Globe
-} from 'lucide-react';
+  FaCalendarAlt as Calendar,
+  FaMapMarkerAlt as MapPin,
+  FaUsers as Users,
+  FaClock as Clock,
+  FaTicketAlt as Ticket,
+  FaGlobe as Globe,
+  FaPhone as Phone,
+  FaEnvelope as Mail,
+  FaStar as Star,
+  FaShare as Share2,
+  FaHeart as Heart,
+  FaChevronLeft as ChevronLeft,
+  FaExternalLinkAlt as ExternalLink
+} from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 
 const EventDetails = () => {
@@ -59,7 +59,7 @@ const EventDetails = () => {
           text: event.description,
           url: window.location.href
         });
-      } catch (error) {
+      } catch {
         console.log('Share cancelled');
       }
     } else {

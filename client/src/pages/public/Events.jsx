@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Calendar, MapPin, Users, Star, ChevronDown, Grid, List, X } from 'lucide-react';
+import { FaSearch as Search, FaFilter as Filter, FaCalendarAlt as Calendar, FaMapMarkerAlt as MapPin, FaUsers as Users, FaStar as Star, FaChevronDown as ChevronDown, FaTh as Grid, FaList as List, FaTimes as X } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 
 const Events = () => {
@@ -58,7 +58,7 @@ const Events = () => {
         limit: 12,
         sort: filters.sort,
         ...Object.fromEntries(
-          Object.entries(filters).filter(([_, value]) => value !== '')
+          Object.entries(filters).filter(([, value]) => value !== '')
         )
       });
 

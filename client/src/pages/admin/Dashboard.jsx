@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Users, 
-  Calendar, 
-  DollarSign, 
-  TrendingUp,
-  EventIcon,
-  Eye,
-  BarChart3,
-  PieChart,
-  Download,
-  Shield,
-  AlertTriangle,
-  CheckCircle,
-  X,
-  Edit,
-  Trash2,
-  MoreVertical,
-  Search,
-  Filter
-} from 'lucide-react';
+  FaUsers as Users,
+  FaCalendarAlt as Calendar,
+  FaDollarSign as DollarSign,
+  FaChartLine as TrendingUp,
+  FaCalendarCheck as EventIcon,
+  FaEye as Eye,
+  FaChartBar as BarChart3,
+  FaShieldAlt as Shield,
+  FaExclamationTriangle as AlertTriangle,
+  FaCheckCircle as CheckCircle,
+  FaEdit as Edit,
+  FaTrash as Trash2,
+  FaSearch as Search
+} from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
@@ -29,8 +24,8 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [users, setUsers] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [bookings, setBookings] = useState([]);
+  const [, setEvents] = useState([]);
+  const [, setBookings] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [userFilter, setUserFilter] = useState('all');

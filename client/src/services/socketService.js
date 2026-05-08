@@ -14,7 +14,7 @@ class SocketService {
       return;
     }
 
-    this.socket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000', {
+    this.socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000', {
       auth: {
         token
       },

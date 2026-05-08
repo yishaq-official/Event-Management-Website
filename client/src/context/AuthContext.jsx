@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 // Initial state
@@ -177,7 +177,7 @@ export const AuthProvider = ({ children }) => {
         toast.error(error);
         return { success: false, error };
       }
-    } catch (error) {
+    } catch {
       const errorMessage = 'Network error. Please try again.';
       dispatch({
         type: AUTH_ACTIONS.LOGIN_FAILURE,
@@ -229,7 +229,7 @@ export const AuthProvider = ({ children }) => {
         toast.error(error);
         return { success: false, error };
       }
-    } catch (error) {
+    } catch {
       const errorMessage = 'Network error. Please try again.';
       dispatch({
         type: AUTH_ACTIONS.REGISTER_FAILURE,
@@ -296,7 +296,7 @@ export const AuthProvider = ({ children }) => {
         toast.error(error);
         return { success: false, error };
       }
-    } catch (error) {
+    } catch {
       const errorMessage = 'Network error. Please try again.';
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -351,12 +351,12 @@ export const AuthProvider = ({ children }) => {
 };
 
 // Hook to use auth context
-export const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}
 
 export default AuthContext;

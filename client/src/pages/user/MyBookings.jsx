@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Clock, 
-  Ticket,
-  Download,
-  X,
-  CheckCircle,
-  AlertCircle,
-  CreditCard,
-  ArrowRight
-} from 'lucide-react';
+  FaCalendarAlt as Calendar,
+  FaMapMarkerAlt as MapPin,
+  FaUsers as Users,
+  FaTicketAlt as Ticket,
+  FaClock as Clock,
+  FaExclamationCircle as AlertCircle,
+  FaCreditCard as CreditCard,
+  FaArrowRight as ArrowRight,
+  FaCheckCircle as CheckCircle,
+  FaDownload as Download,
+  FaTimes as X
+} from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 
 const MyBookings = () => {
@@ -100,7 +100,7 @@ const MyBookings = () => {
     }
   };
 
-  const downloadTicket = (booking) => {
+  const downloadTicket = () => {
     // TODO: Implement ticket download functionality
     toast.info('Ticket download coming soon!');
   };

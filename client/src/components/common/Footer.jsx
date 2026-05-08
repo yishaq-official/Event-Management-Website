@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Mail, Phone} from 'lucide-react';
+import { FaCalendarAlt as Calendar, FaMapMarkerAlt as MapPin, FaEnvelope as Mail, FaPhone as Phone } from 'react-icons/fa';
 import { FaFacebook as FacebookIcon } from "react-icons/fa";
 import { FaInstagram as Instagram, FaLinkedinIn as Linkedin, FaTwitter as Twitter } from "react-icons/fa";
 

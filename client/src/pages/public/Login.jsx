@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
+import { FaEye as Eye, FaEyeSlash as EyeOff, FaEnvelope as Mail, FaLock as Lock, FaExclamationCircle as AlertCircle } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 
 const Login = () => {

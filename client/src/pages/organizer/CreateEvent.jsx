@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Clock, 
-  DollarSign,
-  Plus,
-  X,
-  Save,
-  Eye,
-  Upload,
-  Globe
-} from 'lucide-react';
+  FaCalendarAlt as Calendar,
+  FaMapMarkerAlt as MapPin,
+  FaUsers as Users,
+  FaClock as Clock,
+  FaGlobe as Globe,
+  FaEye as Eye,
+  FaUpload as Upload,
+  FaPlus as Plus,
+  FaTimes as X,
+  FaSave as Save
+} from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 

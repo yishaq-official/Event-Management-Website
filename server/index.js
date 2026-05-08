@@ -77,7 +77,7 @@ app.use((err, req, res, next) => {
 });
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
@@ -88,9 +88,7 @@ const server = app.listen(PORT, () => {
 });
 
 // Initialize Socket.IO
-const SocketService = require('./src/services/socketService');
-const socketService = new SocketService();
-socketService.initialize(server);
+SocketService.initialize(server);
 
 // Graceful shutdown
 process.on('SIGTERM', () => {

@@ -164,23 +164,25 @@ const updateUserStatus = async (req, res, next) => {
       });
     }
 
+    const existingUser = await User.findById(userId);
+
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
     const user = await User.findByIdAndUpdate(
       userId,
       {
         isActive: status === 'active',
         suspensionReason: status === 'suspended' ? reason : undefined,
         suspendedAt: status === 'suspended' ? new Date() : undefined,
-        reactivatedAt: status === 'active' && user.suspendedAt ? new Date() : undefined
+        reactivatedAt: status === 'active' && existingUser.suspendedAt ? new Date() : undefined
       },
       { new: true, runValidators: true }
     ).select('-password');
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found'
-      });
-    }
 
     res.status(200).json({
       success: true,
@@ -209,7 +211,10 @@ const getEvents = async (req, res, next) => {
     const filter = {};
     
     if (req.query.search) {
-      filter.$text = { $regex: req.query.search, $options: 'i' } };
+      filter.$or = [
+        { title: { $regex: req.query.search, $options: 'i' } },
+        { description: { $regex: req.query.search, $options: 'i' } }
+      ];
     }
 
     if (req.query.status) {
