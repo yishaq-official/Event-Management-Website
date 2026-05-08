@@ -15,11 +15,13 @@ const {
   corsOptions
 } = require('./src/middleware/securityMiddleware');
 
-// Import routes
+// Import routes and services
 const authRoutes = require('./src/routes/authRoutes');
 const eventRoutes = require('./src/routes/eventRoutes');
 const bookingRoutes = require('./src/routes/bookingRoutes');
 const analyticsRoutes = require('./src/routes/analyticsRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
+const SocketService = require('./src/services/socketService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -43,6 +45,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/admin', adminRoutes);
 
 // MongoDB connection
 require('./src/config/db');
@@ -72,10 +75,15 @@ app.use('*', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Health check available at http://localhost:${PORT}/api/health`);
 });
+
+// Initialize Socket.IO
+const SocketService = require('./src/services/socketService');
+const socketService = new SocketService();
+socketService.initialize(server);
 
 // Graceful shutdown
 process.on('SIGTERM', () => {

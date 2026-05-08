@@ -12,6 +12,7 @@ import EventDetails from './pages/public/EventDetails';
 import Booking from './pages/public/Booking';
 import CreateEvent from './pages/organizer/CreateEvent';
 import OrganizerDashboard from './pages/organizer/Dashboard';
+import AdminDashboard from './pages/admin/Dashboard';
 import MyBookings from './pages/user/MyBookings';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             <Route path="/events/:id/book" element={<Booking />} />
             <Route path="/organizer/create-event" element={<CreateEvent />} />
             <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/my-bookings" element={<MainLayout><MyBookings /></MainLayout>} />
           </Routes>
           <Toaster
