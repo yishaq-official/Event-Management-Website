@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Menu, X, User, LogOut, Calendar, PlusCircle } from 'lucide-react';
+import { Search, Menu, X, User, LogOut, Calendar, PlusCircle, Ticket } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-
-  // Mock user state - replace with actual auth context
-  const [user, setUser] = useState(null);
+  const { user, logout } = useAuth();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -18,9 +17,8 @@ const Navbar = () => {
     }
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    // Add actual logout logic here
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
   };
 
@@ -58,6 +56,14 @@ const Navbar = () => {
             
             {user ? (
               <>
+                <Link 
+                  to="/my-bookings" 
+                  className="flex items-center text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  <Ticket className="w-4 h-4 mr-1" />
+                  My Bookings
+                </Link>
+                
                 {user.role === 'organizer' && (
                   <Link 
                     to="/organizer/create-event" 
@@ -75,6 +81,12 @@ const Navbar = () => {
                   </button>
                   
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                    <Link 
+                      to="/my-bookings" 
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      My Bookings
+                    </Link>
                     <Link 
                       to={`/${user.role}/dashboard`} 
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
@@ -153,6 +165,14 @@ const Navbar = () => {
               
               {user ? (
                 <>
+                  <Link 
+                    to="/my-bookings" 
+                    className="block text-gray-700 hover:text-blue-600 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    My Bookings
+                  </Link>
+                  
                   {user.role === 'organizer' && (
                     <Link 
                       to="/organizer/create-event" 

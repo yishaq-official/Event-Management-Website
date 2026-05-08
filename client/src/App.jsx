@@ -9,7 +9,9 @@ import Login from './pages/public/Login';
 import Register from './pages/public/Register';
 import Events from './pages/public/Events';
 import EventDetails from './pages/public/EventDetails';
+import Booking from './pages/public/Booking';
 import CreateEvent from './pages/organizer/CreateEvent';
+import MyBookings from './pages/user/MyBookings';
 
 function App() {
   return (
@@ -22,7 +24,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/events" element={<MainLayout><Events /></MainLayout>} />
             <Route path="/events/:id" element={<MainLayout><EventDetails /></MainLayout>} />
+            <Route path="/events/:id/book" element={<Booking />} />
             <Route path="/organizer/create-event" element={<CreateEvent />} />
+            <Route path="/my-bookings" element={<MainLayout><MyBookings /></MainLayout>} />
           </Routes>
           <Toaster
             position="top-right"
