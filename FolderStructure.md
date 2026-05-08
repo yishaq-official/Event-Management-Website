@@ -354,34 +354,3 @@ Use:
 * PascalCase for components/models
 * kebab-case for folders if needed
 
-Example:
-
-```txt id="73br2q"
-EventCard.jsx
-authController.js
-bookingRoutes.js
-```
-
----
-
-# Suggested Git Workflow
-
-Branches:
-
-```txt id="07g5gd"
-main
-develop
-feature/auth
-feature/events
-feature/booking
-```
-
-Commit style:
-
-```txt id="vuhz8w"
-feat: add login system
-fix: resolve JWT middleware issue
-style: improve navbar responsiveness
-```
-
----
