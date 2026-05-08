@@ -1,4 +1,4 @@
-A clean folder structure is extremely important for a large MERN project like an event management system.
+
 Below is a scalable structure that looks professional and is suitable for:
 
 * Authentication
