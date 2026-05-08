@@ -55,7 +55,8 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/uploads', express.static('uploads'));
 
 // MongoDB connection
-require('./src/config/db');
+const connectDB = require('./src/config/db');
+connectDB();
 
 // Basic routes
 app.get('/', (req, res) => {
