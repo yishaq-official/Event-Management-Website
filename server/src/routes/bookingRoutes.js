@@ -9,6 +9,13 @@ const {
   getEventBookings
 } = require('../controllers/bookingController');
 const { authenticate, authorize, checkEventAccess } = require('../middleware/authMiddleware');
+const { bookingLimiter } = require('../middleware/securityMiddleware');
+const {
+  validate,
+  validateObjectId,
+  validatePagination,
+  validateDateRange
+} = require('../middleware/validationMiddleware');
 const {
   createBookingValidation,
   confirmPaymentValidation,
@@ -18,11 +25,39 @@ const {
 
 const router = express.Router();
 
+// Enhanced validation for booking creation
+const enhancedBookingValidation = [
+  ...createBookingValidation,
+  (req, res, next) => {
+    const { eventId, quantity } = req.body;
+    
+    // Validate event ID
+    if (eventId && !validateObjectId(eventId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid event ID'
+      });
+    }
+    
+    // Validate quantity
+    if (quantity && (quantity < 1 || quantity > 10)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Quantity must be between 1 and 10'
+      });
+    }
+    
+    next();
+  }
+];
+
 // User booking routes
 router.post(
   '/',
   authenticate,
-  createBookingValidation,
+  bookingLimiter,
+  enhancedBookingValidation,
+  validate,
   createBooking
 );
 

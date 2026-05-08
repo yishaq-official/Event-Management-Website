@@ -1,26 +1,51 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+
+// Import security middleware
+const {
+  generalLimiter,
+  authLimiter,
+  bookingLimiter,
+  sanitizeInput,
+  validateInput,
+  requestSizeLimiter,
+  helmetConfig,
+  corsOptions
+} = require('./src/middleware/securityMiddleware');
+
+// Import routes
+const authRoutes = require('./src/routes/authRoutes');
+const eventRoutes = require('./src/routes/eventRoutes');
+const bookingRoutes = require('./src/routes/bookingRoutes');
+const analyticsRoutes = require('./src/routes/analyticsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Security middleware
+app.use(helmet(helmetConfig));
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Rate limiting and input sanitization
+app.use('/api/auth', authLimiter);
+app.use('/api/bookings', bookingLimiter);
+app.use(generalLimiter);
+app.use(sanitizeInput);
+app.use(validateInput);
+app.use(requestSizeLimiter);
+
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/event-management', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => {
-  console.log('Connected to MongoDB');
-})
-.catch((error) => {
-  console.error('MongoDB connection error:', error);
-  process.exit(1);
-});
+require('./src/config/db');
 
 // Basic routes
 app.get('/', (req, res) => {
