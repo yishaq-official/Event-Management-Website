@@ -63,6 +63,15 @@ const register = async (req, res, next) => {
 
     sendTokenResponse(user, 201, res, 'User registered successfully');
   } catch (error) {
+    // Handle MongoDB duplicate key error (e.g., email already exists)
+    if (error && (error.code === 11000 || String(error.code) === '11000' || error.name === 'MongoServerError')) {
+      const field = error.keyValue ? Object.keys(error.keyValue)[0] : 'email';
+      return res.status(409).json({
+        success: false,
+        message: `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`
+      });
+    }
+
     console.error('Registration error:', error);
     res.status(500).json({
       success: false,
