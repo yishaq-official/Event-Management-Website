@@ -355,14 +355,24 @@ const forgotPassword = async (req, res, next) => {
 
     await user.save();
 
-    // TODO: Send email with reset token
-    // For now, just return success (in production, implement email service)
+    const emailService = require('../utils/emailService');
+    try {
+      await emailService.sendPasswordResetEmail(user, resetToken);
+    } catch (err) {
+      console.error('Error sending password reset email:', err);
+    }
 
-    res.status(200).json({
+    // Return token only in non-production for debugging
+    const response = {
       success: true,
-      message: 'Password reset email sent',
-      resetToken // Only for development, remove in production
-    });
+      message: 'Password reset email sent'
+    };
+
+    if (process.env.NODE_ENV !== 'production') {
+      response.resetToken = resetToken;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     console.error('Forgot password error:', error);
     res.status(500).json({

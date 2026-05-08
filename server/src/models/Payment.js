@@ -239,12 +239,10 @@ const paymentSchema = new mongoose.Schema({
 });
 
 // Indexes for better query performance
-paymentSchema.index({ booking: 1 });
 paymentSchema.index({ user: 1 });
 paymentSchema.index({ event: 1 });
 paymentSchema.index({ status: 1 });
 paymentSchema.index({ gateway: 1 });
-paymentSchema.index({ gatewayTransactionId: 1 });
 paymentSchema.index({ createdAt: -1 });
 
 // Virtual for total refunded amount

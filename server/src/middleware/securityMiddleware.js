@@ -1,4 +1,5 @@
-const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
+const rateLimit = require('express-rate-limit');
+const ipKeyGenerator = (typeof rateLimit.ipKeyGenerator === 'function') ? rateLimit.ipKeyGenerator : (req => req.ip);
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss');
@@ -18,7 +19,7 @@ const createRateLimiter = (windowMs, max, message) => {
     skipSuccessfulRequests: false,
     // Custom key generator to include user ID if available
     keyGenerator: (req) => {
-      return req.user ? `user_${req.user._id}` : ipKeyGenerator(req.ip);
+      return req.user ? `user_${req.user._id}` : ipKeyGenerator(req);
     }
   });
 };
