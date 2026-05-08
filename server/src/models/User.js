@@ -118,16 +118,15 @@ userSchema.virtual('reviews', {
 });
 
 // Pre-save middleware to hash password
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function() {
   // Only hash the password if it has been modified (or is new)
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) return;
   
   try {
     // Hash password with cost of 12
     this.password = await bcrypt.hash(this.password, 12);
-    next();
   } catch (error) {
-    next(error);
+    throw error;
   }
 });
 

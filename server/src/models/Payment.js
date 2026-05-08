@@ -276,16 +276,15 @@ paymentSchema.virtual('isSuccessful').get(function() {
 });
 
 // Pre-save middleware to calculate net amount and fees
-paymentSchema.pre('save', function(next) {
+paymentSchema.pre('save', function() {
   if (this.isNew || this.isModified('fees')) {
     this.fees.total = this.fees.processing + this.fees.gateway + this.fees.platform;
     this.netAmount = this.amount - this.fees.total;
   }
-  next();
 });
 
 // Pre-save middleware to add timeline entry
-paymentSchema.pre('save', function(next) {
+paymentSchema.pre('save', function() {
   if (this.isNew) {
     this.timeline.push({
       status: this.status,
@@ -300,7 +299,6 @@ paymentSchema.pre('save', function(next) {
       notes: `Status changed to ${this.status}`
     });
   }
-  next();
 });
 
 // Static method to find by user

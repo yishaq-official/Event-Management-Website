@@ -244,26 +244,26 @@ reviewSchema.virtual('averageAspectRating').get(function() {
 });
 
 // Pre-save middleware to validate booking
-reviewSchema.pre('save', async function(next) {
+reviewSchema.pre('save', async function() {
   if (this.isNew) {
     // Check if user actually attended the event
     const Booking = mongoose.model('Booking');
     const booking = await Booking.findById(this.booking);
     
     if (!booking) {
-      return next(new Error('Booking not found'));
+      throw new Error('Booking not found');
     }
     
     if (booking.user.toString() !== this.user.toString()) {
-      return next(new Error('Booking does not belong to this user'));
+      throw new Error('Booking does not belong to this user');
     }
     
     if (booking.event.toString() !== this.event.toString()) {
-      return next(new Error('Booking does not belong to this event'));
+      throw new Error('Booking does not belong to this event');
     }
     
     if (booking.bookingStatus !== 'completed') {
-      return next(new Error('Can only review completed events'));
+      throw new Error('Can only review completed events');
     }
     
     // Check if event has ended
@@ -271,28 +271,25 @@ reviewSchema.pre('save', async function(next) {
     const event = await Event.findById(this.event);
     
     if (!event) {
-      return next(new Error('Event not found'));
+      throw new Error('Event not found');
     }
     
     const now = new Date();
     const eventEnd = new Date(event.date.endDate);
     
     if (now < eventEnd) {
-      return next(new Error('Can only review events that have ended'));
+      throw new Error('Can only review events that have ended');
     }
     
     this.verified = true;
   }
-  
-  next();
 });
 
 // Pre-save middleware to update helpful count
-reviewSchema.pre('save', function(next) {
+reviewSchema.pre('save', function() {
   if (this.isModified('helpful.users')) {
     this.helpful.count = this.helpful.users.length;
   }
-  next();
 });
 
 // Static method to find approved reviews

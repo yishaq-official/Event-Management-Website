@@ -239,7 +239,7 @@ bookingSchema.virtual('canCheckIn').get(function() {
 });
 
 // Pre-save middleware to generate QR codes for attendees
-bookingSchema.pre('save', async function(next) {
+bookingSchema.pre('save', async function() {
   if (this.isNew || this.isModified('attendees')) {
     const QRCode = require('qrcode');
     
@@ -256,11 +256,10 @@ bookingSchema.pre('save', async function(next) {
       }
     }
   }
-  next();
 });
 
 // Pre-save middleware to calculate totals
-bookingSchema.pre('save', function(next) {
+bookingSchema.pre('save', function() {
   if (this.isNew || this.isModified('tickets') || this.isModified('discount') || this.isModified('tax') || this.isModified('fees')) {
     // Calculate ticket subtotal
     let subtotal = 0;
@@ -290,7 +289,6 @@ bookingSchema.pre('save', function(next) {
     
     this.totalAmount = Math.round(total * 100) / 100; // Round to 2 decimal places
   }
-  next();
 });
 
 // Static method to find user bookings

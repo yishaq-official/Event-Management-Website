@@ -73,9 +73,15 @@ const register = async (req, res, next) => {
     }
 
     console.error('Registration error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      name: error.name,
+      stack: error.stack
+    });
     res.status(500).json({
       success: false,
-      message: 'Server error during registration'
+      message: 'Server error during registration',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

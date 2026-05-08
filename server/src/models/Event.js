@@ -311,12 +311,11 @@ eventSchema.virtual('isPast').get(function() {
 });
 
 // Pre-save middleware to update current attendees
-eventSchema.pre('save', function(next) {
+eventSchema.pre('save', function() {
   if (this.isModified('bookings')) {
     // This would be updated when bookings are created/cancelled
     // For now, we'll handle this in the booking controller
   }
-  next();
 });
 
 // Static method to find upcoming events

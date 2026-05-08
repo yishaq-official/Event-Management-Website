@@ -153,11 +153,10 @@ notificationSchema.virtual('canRetry').get(function() {
 });
 
 // Pre-save middleware to validate scheduling
-notificationSchema.pre('save', function(next) {
+notificationSchema.pre('save', function() {
   if (this.scheduledFor && this.scheduledFor <= new Date()) {
     this.scheduledFor = undefined;
   }
-  next();
 });
 
 // Static method to find unread notifications

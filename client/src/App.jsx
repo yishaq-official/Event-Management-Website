@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/public/Home';
 import Login from './pages/public/Login';
@@ -12,6 +12,24 @@ import CreateEvent from './pages/organizer/CreateEvent';
 import OrganizerDashboard from './pages/organizer/Dashboard';
 import AdminDashboard from './pages/admin/Dashboard';
 import MyBookings from './pages/user/MyBookings';
+
+// Dashboard redirect component based on user role
+const DashboardRedirect = () => {
+  const { user } = useAuth();
+  
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  
+  switch (user.role) {
+    case 'admin':
+      return <Navigate to="/admin/dashboard" />;
+    case 'organizer':
+      return <Navigate to="/organizer/dashboard" />;
+    default:
+      return <Navigate to="/my-bookings" />;
+  }
+};
 
 function App() {
   return (
@@ -28,6 +46,7 @@ function App() {
             <Route path="/organizer/create-event" element={<CreateEvent />} />
             <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/dashboard" element={<DashboardRedirect />} />
             <Route path="/my-bookings" element={<MainLayout><MyBookings /></MainLayout>} />
           </Routes>
           <Toaster

@@ -1,0 +1,5 @@
+nohup: ignoring input
+Socket.IO server initialized
+Server is running on port 5000
+Health check available at http://localhost:5000/api/health
+MongoDB Connected: localhost
