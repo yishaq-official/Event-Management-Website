@@ -21,6 +21,8 @@ const eventRoutes = require('./src/routes/eventRoutes');
 const bookingRoutes = require('./src/routes/bookingRoutes');
 const analyticsRoutes = require('./src/routes/analyticsRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
+const uploadRoutes = require('./src/routes/uploadRoutes');
+const reviewRoutes = require('./src/routes/reviewRoutes');
 const SocketService = require('./src/services/socketService');
 
 const app = express();
@@ -46,6 +48,11 @@ app.use('/api/events', eventRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/reviews', reviewRoutes);
+
+// Static file serving for uploads
+app.use('/uploads', express.static('uploads'));
 
 // MongoDB connection
 require('./src/config/db');
