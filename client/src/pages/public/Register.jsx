@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye as Eye, FaEyeSlash as EyeOff, FaEnvelope as Mail, FaLock as Lock, FaUser as User, FaExclamationCircle as AlertCircle } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
 
 const Register = () => {
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -85,8 +87,8 @@ const Register = () => {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\#])/.test(formData.password)) {
-      newErrors.password = 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&\#)';
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/.test(formData.password)) {
+      newErrors.password = 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#)';
     }
     
     if (!formData.confirmPassword) {
@@ -109,43 +111,23 @@ const Register = () => {
     setLoading(true);
     
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role
-        })
+      const result = await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role
       });
       
-      const data = await response.json();
-      
-      if (data.success) {
-        // Store tokens in localStorage
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        toast.success('Registration successful!');
-        
+      if (result.success) {
         // Redirect based on user role
-        if (data.user.role === 'admin') {
+        if (result.user.role === 'admin') {
           navigate('/admin/dashboard');
-        } else if (data.user.role === 'organizer') {
+        } else if (result.user.role === 'organizer') {
           navigate('/organizer/dashboard');
         } else {
           navigate('/dashboard');
         }
-      } else {
-        toast.error(data.message || 'Registration failed');
       }
-    } catch (error) {
-      console.error('Registration error:', error);
-      toast.error('Network error. Please try again.');
     } finally {
       setLoading(false);
     }

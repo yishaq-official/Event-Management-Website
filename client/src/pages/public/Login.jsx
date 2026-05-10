@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye as Eye, FaEyeSlash as EyeOff, FaEnvelope as Mail, FaLock as Lock, FaExclamationCircle as AlertCircle } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -57,38 +59,18 @@ const Login = () => {
     setLoading(true);
     
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+      const result = await login(formData.email, formData.password);
       
-      const data = await response.json();
-      
-      if (data.success) {
-        // Store tokens in localStorage
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        toast.success('Login successful!');
-        
+      if (result.success) {
         // Redirect based on user role
-        if (data.user.role === 'admin') {
+        if (result.user.role === 'admin') {
           navigate('/admin/dashboard');
-        } else if (data.user.role === 'organizer') {
+        } else if (result.user.role === 'organizer') {
           navigate('/organizer/dashboard');
         } else {
           navigate('/dashboard');
         }
-      } else {
-        toast.error(data.message || 'Login failed');
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error('Network error. Please try again.');
     } finally {
       setLoading(false);
     }
