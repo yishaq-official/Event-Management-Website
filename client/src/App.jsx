@@ -12,6 +12,8 @@ import CreateEvent from './pages/organizer/CreateEvent';
 import OrganizerDashboard from './pages/organizer/Dashboard';
 import AdminDashboard from './pages/admin/Dashboard';
 import MyBookings from './pages/user/MyBookings';
+import Profile from './pages/user/Profile';
+import UserDashboard from './pages/user/Dashboard';
 
 // Dashboard redirect component based on user role
 const DashboardRedirect = () => {
@@ -27,7 +29,7 @@ const DashboardRedirect = () => {
     case 'organizer':
       return <Navigate to="/organizer/dashboard" />;
     default:
-      return <Navigate to="/my-bookings" />;
+      return <Navigate to="/user/dashboard" />;
   }
 };
 
@@ -46,8 +48,10 @@ function App() {
             <Route path="/organizer/create-event" element={<CreateEvent />} />
             <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/user/dashboard" element={<MainLayout><UserDashboard /></MainLayout>} />
             <Route path="/dashboard" element={<DashboardRedirect />} />
             <Route path="/my-bookings" element={<MainLayout><MyBookings /></MainLayout>} />
+            <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
           </Routes>
           <Toaster
             position="top-right"

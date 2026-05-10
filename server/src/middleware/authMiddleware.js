@@ -39,12 +39,12 @@ const authenticate = async (req, res, next) => {
       });
     }
 
-    if (!user.isEmailVerified) {
-      return res.status(401).json({
-        success: false,
-        message: 'Please verify your email address.'
-      });
-    }
+    // if (!user.isEmailVerified) {
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: 'Please verify your email address.'
+    //   });
+    // }
 
     // Attach user to request object
     req.user = user;
